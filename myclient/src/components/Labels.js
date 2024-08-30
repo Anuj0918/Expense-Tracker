@@ -1,26 +1,26 @@
 import React from "react";
+import { getLabels } from "../helper/helper";
+import {default as api} from '../components/store/slice';
 
-const obj=[
-  {
-     type:"Savings",
-     color:"#f9c74f",
-     percent:45
-  },
-  {
-    type:"Investment",
-    color:"#f9c74f",
-    percent:22
- },
- {
-    type:"Expense",
-    color:"#fc324f",
-    percent:10
- },
-]
 export default function Labels() {
+    const { data, isFetching , isSuccess, isError } = api.useGetLabelsQuery()
+    console.log(data);
+    let Transactions;
+
+    
+
+    if(isFetching){
+        Transactions = <div>Fetching</div>;
+    }else if(isSuccess){
+        Transactions = getLabels(data, 'type').map((v, i) => <LabelComponent key={i} data={v}></LabelComponent>);
+    }else if(isError){
+        Transactions = <div>Error</div>
+    }
+
+    
     return (
         <>
-        {obj.map((v,i)=> <LabelComponent key={i} data={v}/>)}
+        {Transactions}
         </>
     )
 }
